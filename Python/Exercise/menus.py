@@ -120,7 +120,7 @@ def menu_horizontal(col, Title,args):
         if option <= -1:
             option = len(args)-1
         elif option > len(args)-1:
-            option = 0
+            option = option%col
 
         #Enter to select option
         if key_arrow == "\x0d":
@@ -135,9 +135,9 @@ def menu_horizontal(col, Title,args):
 
 def main():
     Title = "Menu"
-    options = ["Sushi", "Tacos", "Hot Dogs", "Lasagna", "Guandul","Mote", "Queso", "Perro", "Gato"]
-    # option = menu_horizontal(3,Title,options)
-    option = menu_vertical(Title, options)
+    options = ["Sushi", "Tacos", "Hot Dogs", "Lasagna", "Guandul","Mote", "Queso", "Perro"]
+    option = menu_horizontal(3,Title,options)
+    # option = menu_vertical(Title, options)
     print(option)
 
 
