@@ -249,7 +249,8 @@ def main():
     options = []
     for a in range(17):
         options.append(str(a))
-    
+
+    option = menu_matrix_2(5,Title,options)    
     option = menu_matrix_1(4,Title,options)
     option = menu_vertical(Title, options)
     print(option)
