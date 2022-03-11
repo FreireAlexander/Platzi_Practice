@@ -1,17 +1,18 @@
 import readchar
 import os
-
+import math
+import time
 '''
 UP = "\x1b\x5b\x41"
 DOWN = "\x1b\x5b\x42"
 LEFT = "\x1b\x5b\x44"
 RIGHT = "\x1b\x5b\x43"
 '''
+# arrow image in ASCII
+ARROW_CHAR = "-->"
 
 def cursor_UP_DOWN(option):
-    
     key_arrow = readchar.readkey()
-
     if key_arrow == "\x1b\x5b\x41":
         option -= 1
     elif key_arrow == "\x1b\x5b\x42":
@@ -20,24 +21,21 @@ def cursor_UP_DOWN(option):
 
 def menu_vertical(Title,args):
 
-    # arrow image in ASCII
-    arrow = "-->"
-
     isValid = True
-
     if len(args) < 1:
         isValid = False
         return "Options must be greater than 1"
-
     option = 0
 
+    max_string = len(max(args, key = len))
+    length_title_frames = ((len(ARROW_CHAR) + max_string + 2) - len(Title))//2
     while isValid:
 
         # Drawing menu
-        print("---------- {} -----------".format(Title))
+        print("_" * length_title_frames + " {} ".format(Title) + "_" * length_title_frames)
         for a in args:
             if args.index(a) == option:
-                print("{}\t{}".format(arrow,a))
+                print("{}\t{}".format(ARROW_CHAR,a))
             else:
                 print("\t{}".format(a))
             #Esc to exit menu or press Enter to select option   
@@ -45,19 +43,16 @@ def menu_vertical(Title,args):
         # Catching cursor
 
         option,key_arrow = cursor_UP_DOWN(option)
-        os.system("cls")
-        
+        os.system("cls")       
         #Validating option
         if option <= -1:
             option = len(args)-1
         elif option > len(args)-1:
             option = 0
-
         #Enter to select option
         if key_arrow == "\x0d":
             isValid = False
-            return option + 1
-
+            return option
         #Esc to exit menu and return None, None options selected
         if key_arrow == "\x1b":
             isValid = False
@@ -65,7 +60,6 @@ def menu_vertical(Title,args):
 
 
 def cursor_UDLR(option,col):
-    
     key_arrow = readchar.readkey()
     if key_arrow == "\x1b\x5b\x41": #UP
         option -= col
@@ -78,55 +72,162 @@ def cursor_UDLR(option,col):
     return option, key_arrow  
 
 
-def menu_horizontal(col, Title,args):
-
-    # arrow image in ASCII
-    arrow = "-->"
-    
+def menu_matrix_1(col, Title,args):
     isValid = True
-
     if len(args) < 1:
         isValid = False
         return "Options must be greater than 1"
-
+    # Defining maximun string len
+    max_string = len(max(args, key = len))
+    length_title_frames = ((len(ARROW_CHAR) + max_string + 2)*col - len(Title))//2
     option = 0
-
     while isValid:
-
         # Drawing menu
-        print("---------- {} -----------".format(Title))
-
+        print("_" * length_title_frames + " {} ".format(Title) + "_" * length_title_frames) 
         for a in args:
+            num = len(a)
             if args.index(a)%col == 0 and args.index(a) != 0:
-                print("\n")
-
+                print("")
 
             if args.index(a) == option:
-                print(" {} {}".format(arrow,a),end="")
+                print("{} {}".format(ARROW_CHAR,a)+" "*(max_string-num)+" ",end="")
             else:
-                print("   {} ".format(a), end="")
-            
-            #Esc to exit menu or press Enter to select option
-            
-
+                print(" "*len(ARROW_CHAR)+" {}".format(a)+" "*(max_string-len(a))+" ", end="")     
+            #Esc to exit menu or press Enter to select option    
         print("\n\nEsc to exit or press Enter to select option\n")
-        
         # Catching cursor
-
         option,key_arrow = cursor_UDLR(option,col)
         os.system("cls")
-        
-        #Validating option
-        if option <= -1:
-            option = len(args)-1
-        elif option > len(args)-1:
-            option = option%col
-
+        # validation option [0:max]
+        if option >= len(args):
+            if key_arrow in ["\x1b\x5b\x43"]:
+                option = 0
+            elif key_arrow in ["\x1b\x5b\x42"]:
+                option = option - col
+        elif option <= -1:
+            if key_arrow in ["\x1b\x5b\x44"]:
+                option = len(args) - 1
+            elif key_arrow in ["\x1b\x5b\x41"]:
+                option = option + col
         #Enter to select option
         if key_arrow == "\x0d":
             isValid = False
-            return option + 1
+            return option
+        #Esc to exit menu and return None, None options selected
+        if key_arrow == "\x1b":
+            isValid = False
+            return None
 
+def input_key(key_arrow):
+    if key_arrow == "\x1b\x5b\x41": #UP
+        return "ARRIBA"
+    elif key_arrow == "\x1b\x5b\x42": #DOWN
+        return "ABAJO"
+    elif key_arrow == "\x1b\x5b\x43": #RIGHT
+        return "DER"
+    elif key_arrow == "\x1b\x5b\x44": #LEFT
+        return "IZQ"
+
+
+def menu_matrix_2(col, Title,args):
+    isValid = True
+    if len(args) < 1:
+        isValid = False
+        return "Options must be greater than 1"
+    #Calculating numbers of row
+    row = math.ceil(len(args)/col)
+    # Defining maximun string len
+    max_string = len(max(args, key = len))
+    length_title_frames = ((len(ARROW_CHAR) + max_string + 2)*col - len(Title))//2
+    option = 0
+    while isValid:
+        # Drawing menu
+        print("_" * length_title_frames + " {} ".format(Title) + "_" * length_title_frames)
+        for a in args:
+            # We need to know the len of string in a for calculating the numbers of spaces
+            # to organize the table of options
+            num = len(a)
+            #Every time we are in first position in a row we need a new line
+            if args.index(a)%col == 0 and args.index(a) != 0:
+                print("")
+            #Positioning arrow in selected
+            if args.index(a) == option:
+                print("{} {}".format(ARROW_CHAR,a)+" "*(max_string-num)+" ",end="")
+            else:
+                print(" "*len(ARROW_CHAR)+" {}".format(a)+" "*(max_string-len(a))+" ", end="")
+            #Esc to exit menu or press Enter to select option   
+        print("\n\nEsc to exit or press Enter to select option\n")
+        # Catching cursor
+        option,key_arrow = cursor_UDLR(option,col)
+        os.system("cls")
+        # Catching corner position for first and first in last row
+        # for controlling events in this position
+        corner = False
+        zero_corner_up = False
+        zero_corner_left = False
+
+        if option == len(args) and key_arrow == "\x1b\x5b\x43":
+            corner = True
+        elif option == -col and key_arrow == "\x1b\x5b\x41":
+            zero_corner_up = True
+        elif option == -1 and key_arrow == "\x1b\x5b\x44":
+            zero_corner_left = True
+        '''Before validating options, I verify if option is in first row and 
+            and input key was UP, then the numbers are negative. Well, later it is just
+            stand from the first element of the last row and move as many option as the 
+            option we are stand in first row
+        '''
+        if option in range (-col, 0):
+            option = option + col
+            if option != 0:
+                if len(args)%col == 0:
+                    option = option + row*col-col
+                elif row*col-col + option > len(args) - 1:
+                    option = row*col-col + option - col
+                else:
+                    option = row*col-col + option
+            elif option > 0:
+               option = option
+
+        # validation option for being between [0:max]
+        if option > len(args) - 1:
+            option = option%col
+        elif option <= -1:
+            if key_arrow in ["\x1b\x5b\x44"]:
+                option = 0
+
+        #Validation by movements
+        if key_arrow == "\x1b\x5b\x44": #Izquierda
+            if (option+1)%col == 0:
+                option = option + col
+        elif key_arrow == "\x1b\x5b\x43": # Derecha
+            if (option-1)%col == col - 1:
+                option = option - col
+
+        # Second validation to assure option is inside posible for choicing
+        if option > len(args) - 1:
+            if key_arrow in ["\x1b\x5b\x44"]:
+                option = len(args) - 1                    
+            else:    
+                option = option%col
+        elif option <= -1:
+            if key_arrow in ["\x1b\x5b\x44"]:
+                option = 0
+            elif key_arrow in ["\x1b\x5b\x41"]:
+                option = option + col
+
+        # Validation of special cases first postion and and firs porsition at last row
+        if corner:
+            option = (row*col)-col  
+        if zero_corner_up:
+            option =  (row*col)-col
+        if zero_corner_left:
+            option = col - 1
+        
+        #Enter to select option
+        if key_arrow == "\x0d":
+            isValid = False
+            return option
         #Esc to exit menu and return None, None options selected
         if key_arrow == "\x1b":
             isValid = False
@@ -134,10 +235,15 @@ def menu_horizontal(col, Title,args):
 
 
 def main():
-    Title = "Menu"
-    options = ["Sushi", "Tacos", "Hot Dogs", "Lasagna", "Guandul","Mote", "Queso", "Perro"]
-    option = menu_horizontal(3,Title,options)
-    # option = menu_vertical(Title, options)
+    Title = "Pokemon Battle"
+    #options =["Attack 1","Attack 2","Menu 1", "Menu 2", "Attack 3", "Attack 4", "Menu 3", "Escape","Impar"]
+    # options = ["Josue","majo","Chiripa","Koro","Charlotte","Sushi", "Tacos", "Hot Dogs", "Lasagna", "Guandul","Mote", "Queso", "Perro"]
+    options = []
+    for a in range(17):
+        options.append(str(a))
+    
+    option = menu_matrix_1(4,Title,options)
+    option = menu_vertical(Title, options)
     print(option)
 
 
