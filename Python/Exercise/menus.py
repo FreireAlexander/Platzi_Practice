@@ -1,7 +1,6 @@
 import readchar
-import os
+from os import system, name
 import math
-import time
 '''
 UP = "\x1b\x5b\x41"
 DOWN = "\x1b\x5b\x42"
@@ -10,6 +9,15 @@ RIGHT = "\x1b\x5b\x43"
 '''
 # arrow image in ASCII
 ARROW_CHAR = "-->"
+
+def clear():
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+    # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
+
 
 def cursor_UP_DOWN(option):
     key_arrow = readchar.readkey()
@@ -43,7 +51,7 @@ def menu_vertical(Title,args):
         # Catching cursor
 
         option,key_arrow = cursor_UP_DOWN(option)
-        os.system("cls")       
+        clear()      
         #Validating option
         if option <= -1:
             option = len(args)-1
@@ -97,7 +105,7 @@ def menu_matrix_1(col, Title,args):
         print("\n\nEsc to exit or press Enter to select option\n")
         # Catching cursor
         option,key_arrow = cursor_UDLR(option,col)
-        os.system("cls")
+        clear()
         # validation option [0:max]
         if option >= len(args):
             if key_arrow in ["\x1b\x5b\x43"]:
@@ -159,7 +167,7 @@ def menu_matrix_2(col, Title,args):
         print("\n\nEsc to exit or press Enter to select option\n")
         # Catching cursor
         option,key_arrow = cursor_UDLR(option,col)
-        os.system("cls")
+        clear()
         # Catching corner position for first and first in last row
         # for controlling events in this position
         corner = False
