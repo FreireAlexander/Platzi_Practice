@@ -1,11 +1,22 @@
 import re
 
+def ToNumber(number):
+	try:
+		number = float(number)
+	except ValueError:
+		number = 0
+
+	return number
+
 def positive_number_validation(number):
-	num_format = re.compile(r'^[0-9]*[.0-9]*$')
-	return re.match(num_format,number)
+	validation = False
+	num_format = re.compile(r'^[^!\v$][^!\D$][0-9]*[.0-9]*$|^[\d][.0-9]*|^[ -][.0-9]*')
+	if re.match(num_format, number) and ToNumber(number) >=0.000001:
+		validation = True
+	return validation
 
 def number_validation(number):
-	num_format = re.compile(r'^\-?[0-9]*[.0-9]*$')
+	num_format = re.compile(r'^[^!\v$][^!\D$]\-?[0-9]*[.0-9]*$|^[\d][.0-9]*|^[ -][.0-9]*')
 	return re.match(num_format,number)
 
 def coordinates_input():
@@ -14,7 +25,7 @@ def coordinates_input():
 
 	while not it_is:
 		coordinates[0] = input("Input Coordinate X: ")
-		num_format = re.compile(r'^\-?[0-9]*.[0-9]*$')
+		num_format = re.compile(r'^[^!\v$][^!\D$]\-?[0-9]*.[0-9]*$|^[\d][.0-9]*|^[ -][.0-9]*')
 		it_is = re.match(num_format,coordinates[0])
 
 	coordinates[0] = float(coordinates[0])
@@ -23,7 +34,7 @@ def coordinates_input():
 
 	while not it_is:
 		coordinates[1] = input("Input Coordinate Y: ")
-		num_format = re.compile(r'^\-?[0-9]*.[0-9]*$')
+		num_format = re.compile(r'^[^!\v$][^!\D$]\-?[0-9]*.[0-9]*$|^[\d][.0-9]*|^[ -][.0-9]*')
 		it_is = re.match(num_format,coordinates[1])
 
 	coordinates[1] = float(coordinates[1])

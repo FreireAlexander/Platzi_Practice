@@ -33,14 +33,14 @@ def main():
                print("Remenber coordinates must be a number")
                coordinates[0] = input("Input horizontal coordinates: ")
            
-           coordinates[0] = float(coordinates[0])
+           coordinates[0] = val.ToNumber(coordinates[0])
 
            coordinates[1] = input("Input vertical coordinates: ")
            while not val.number_validation(coordinates[1]):
                print("Remenber coordinates must be a number")
                coordinates[1] = input("Input horizontal coordinates: ")
            
-           coordinates[1] = float(coordinates[1])
+           coordinates[1] = val.ToNumber(coordinates[1])
 
            subtitle = "Which angle do you know?"
            suboptions = [
@@ -96,7 +96,7 @@ def main():
            distance = float(distance)
 
            #Final validation
-           if coordinate_choice == 1:
+           if coordinate_choice == 1 and angle_choice == 2:
                wcb = calc.backbearing(wcb)
                point_print = "final point to initial point"
 
