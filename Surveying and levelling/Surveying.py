@@ -13,6 +13,7 @@ def main():
                "Exit"]
 
     option = len(options)
+    
     while option != len(options)-1 and option != None:
         option = menus.list_menu(Title, options)
         if option == 0:
