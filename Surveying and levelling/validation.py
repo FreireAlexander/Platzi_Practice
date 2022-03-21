@@ -24,9 +24,12 @@ def isbearing(bearing):
     bearingformat = re.compile(r"^[nNsS][ ]?([0-9]|[1-8][0-9]|[9][0])[°']([0-9]|[1-5][0-9])[°'](0|0?\.[1-9]*|[1-9](?:\.[0-9]*)?|[1-5][0-9](?:\.[0-9]*)?)[°']?[°'][ ]?[EeWwOo]$")
     return re.match(bearingformat,bearing)
 
+def isbearingdecimal(bearing):
+    bearingformat = re.compile(r"^[nNsS][ ]?((?:\.[0-9]*)?|[1-8][0-9](?:\.[0-9]*)?|[9][0])[°']?[ ]?[EeWwOo]")
+    return re.match(bearingformat,bearing)
 
 def isdms(bearing):
-    bearingformat = re.compile(r"^[nNsS][ ]?([0-9]*)[°']([0-9]|[1-5][0-9])[°'](0|0?\.[1-9]*|[1-9](?:\.[0-9]*)?|[1-5][0-9](?:\.[0-9]*)?)[°']?[°'][ ]?[EeWwOo]$")
+    bearingformat = re.compile(r"^[ ]?([0-9]*)[°']([0-9]|[1-5][0-9])[°'](0|0?\.[1-9]*|[1-9](?:\.[0-9]*)?|[1-5][0-9](?:\.[0-9]*)?)[°']?[°'][ ]?$")
     return re.match(bearingformat,bearing)
 
 
@@ -40,7 +43,10 @@ def bearingdata(bearing):
         elif char in ['N','n','S','s','W','w','E','e','O','o']:
             quadrant += char.upper()
 
-
+    bearingdata = bearingdata.replace("''","°")
+    bearingdata = bearingdata.replace("'°","°")
+    bearingdata = bearingdata.replace("°'","°")
+    bearingdata = bearingdata.replace("°°","°")
     bearingdata = bearingdata.replace("'","°")
     bearingdata = bearingdata.split("°")
     bearingdata.pop()
@@ -48,10 +54,33 @@ def bearingdata(bearing):
 
     return bearingdata
 
+def bearingdata_decimal(bearing):
+    bearingdata = ''
+    quadrant = ''
+    for char in bearing:
+
+        if char not in [' ','N','n','S','s','W','w','E','e','O','o','°',"'"]:
+            bearingdata += char
+        elif char in ['N','n','S','s','W','w','E','e','O','o']:
+            quadrant += char.upper()
+
+    bearinginfo = [bearingdata]
+    bearinginfo.append(quadrant)
+
+    return bearinginfo
 
 def main():
 
-	return
+    angle = "N13.234°E"
+    print(bearingdata_decimal(angle))
+
+    angle = "N13.234'E"
+    print(bearingdata_decimal(angle))
+    print(calc.rbdecimaltowcb(bearingdata_decimal(angle)))
+    angle = "S33.234'E"
+    print(bearingdata_decimal(angle))
+    print(calc.rbdecimaltowcb(bearingdata_decimal(angle)))
+    return
 
 if __name__ == "__main__":
     main()

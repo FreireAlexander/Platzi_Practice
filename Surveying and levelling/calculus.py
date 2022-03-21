@@ -17,29 +17,58 @@ def backbearing(wcb):
 		return wcb - 180
 	
 
-def wcbtoreducedbearing(wcb):
+def wcbdecimaltorbdecimal(wcb):
 	wcb = is_wcb_360(wcb)
 	rb = wcb
-	if wcb == 0:
-		rb = 0
-	elif wcb > 0 and wcb < 90:
-		rb = wcb 
-	elif wcb == 90:
-		rb = 90
-	elif wcb > 90 and wcb < 180:
-		rb = 180 - wcb 
-	elif wcb == 180:
-		rb = 180
-	elif wcb > 180 and wcb < 270:
+	if wcb >= 0 and wcb < 90:
+		rb = wcb
+		rb = "N" + str(rb) + "°E"
+	elif wcb >= 90 and wcb < 180:
+		rb = 180 - wcb
+		rb = "S" + str(rb) + "°E"
+	elif wcb >= 180 and wcb < 270:
 		rb = wcb - 180 
-	elif wcb == 270:
-		rb = 270
-	elif wcb > 270 and wcb < 360:
-		rb = 360 - wcb 
-	elif wcb == 360:
-		rb = 0
+		rb = "S" + str(rb) + "°W"
+	elif wcb >= 270 and wcb <= 360:
+		rb = 360 - wcb
+		rb = "N" + str(rb) + "°W"
 
 	return rb
+
+def rbdmstowcb(bearingdata):
+	wcb = 0
+	if bearingdata[3] == "":
+		wcb = dmstodecimals(bearingdata)
+	elif bearingdata[3] in ["NE","ne","nE", "Ne"]:
+		wcb = dmstodecimals(bearingdata)
+	elif bearingdata[3] in ["SE","se","sE", "Se"]:
+		wcb = dmstodecimals(bearingdata)
+		wcb = 180 - wcb
+	elif bearingdata[3] in ["SW","sw","sW", "Sw","SO","so","sO", "So"]:
+		wcb = dmstodecimals(bearingdata)
+		wcb = 180 + wcb
+	elif bearingdata[3] in ["NW","nw","nW", "Nw","NO","no","nO", "No"]:
+		wcb = dmstodecimals(bearingdata)
+		wcb = 360 - wcb
+	return	wcb
+
+
+def rbdecimaltowcb(bearingdata):
+	wcb = 0
+	if bearingdata[1] == "":
+		wcb = float(bearingdata[0])
+	elif bearingdata[1] in ["NE","ne","nE", "Ne"]:
+		wcb = float(bearingdata[0])
+	elif bearingdata[1] in ["SE","se","sE", "Se"]:
+		wcb = float(bearingdata[0])
+		wcb = 180 - wcb
+	elif bearingdata[1] in ["SW","sw","sW", "Sw","SO","so","sO", "So"]:
+		wcb = float(bearingdata[0])
+		wcb = 180 + wcb
+	elif bearingdata[1] in ["NW","nw","nW", "Nw","NO","no","nO", "No"]:
+		wcb = float(bearingdata[0])
+		wcb = 360 - wcb
+	return	wcb
 
 
 def decimaltodms(angle):
@@ -47,10 +76,14 @@ def decimaltodms(angle):
 	degree = int(angle)
 	dms += str(degree) + "°"
 	minutes = int((angle - degree)*60)
-	dms += str(minutes) + "°"
+	dms += str(minutes) + "'"
 	seconds = round(float(((angle - degree)*60 - minutes)*60),3)
-	dms += str(seconds) + "°"
+	dms += str(seconds) + "''"
 	return dms
+
+def dmstodecimals(angle):
+	degree = float(angle[0]) + float(angle[1])/60 + float(angle[2])/3600
+	return degree
 
 def format_wcbtorb(wcb):
 	wcb = is_wcb_360(wcb)
