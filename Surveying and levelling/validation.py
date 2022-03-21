@@ -1,4 +1,5 @@
 import re
+import calculus as calc
 
 def ToNumber(number):
 	try:
@@ -19,37 +20,38 @@ def number_validation(number):
 	num_format = re.compile(r'^[^!\v$][^!\D$]\-?[0-9]*[.0-9]*$|^[\d][.0-9]*|^[ -][.0-9]*')
 	return re.match(num_format,number)
 
-def coordinates_input():
-	coordinates = [0,0]
-	it_is = False
+def isbearing(bearing):
+    bearingformat = re.compile(r"^[nNsS][ ]?([0-9]|[1-8][0-9]|[9][0])[°']([0-9]|[1-5][0-9])[°'](0|0?\.[1-9]*|[1-9](?:\.[0-9]*)?|[1-5][0-9](?:\.[0-9]*)?)[°']?[°'][ ]?[EeWwOo]$")
+    return re.match(bearingformat,bearing)
 
-	while not it_is:
-		coordinates[0] = input("Input Coordinate X: ")
-		num_format = re.compile(r'^[^!\v$][^!\D$]\-?[0-9]*.[0-9]*$|^[\d][.0-9]*|^[ -][.0-9]*')
-		it_is = re.match(num_format,coordinates[0])
 
-	coordinates[0] = float(coordinates[0])
+def isdms(bearing):
+    bearingformat = re.compile(r"^[nNsS][ ]?([0-9]*)[°']([0-9]|[1-5][0-9])[°'](0|0?\.[1-9]*|[1-9](?:\.[0-9]*)?|[1-5][0-9](?:\.[0-9]*)?)[°']?[°'][ ]?[EeWwOo]$")
+    return re.match(bearingformat,bearing)
 
-	it_is = False
 
-	while not it_is:
-		coordinates[1] = input("Input Coordinate Y: ")
-		num_format = re.compile(r'^[^!\v$][^!\D$]\-?[0-9]*.[0-9]*$|^[\d][.0-9]*|^[ -][.0-9]*')
-		it_is = re.match(num_format,coordinates[1])
+def bearingdata(bearing):
+    bearingdata = ''
+    quadrant = ''
+    for char in bearing:
 
-	coordinates[1] = float(coordinates[1])
+        if char not in [' ','N','n','S','s','W','w','E','e','O','o']:
+            bearingdata += char
+        elif char in ['N','n','S','s','W','w','E','e','O','o']:
+            quadrant += char.upper()
 
-	return coordinates
+
+    bearingdata = bearingdata.replace("'","°")
+    bearingdata = bearingdata.split("°")
+    bearingdata.pop()
+    bearingdata.append(quadrant)
+
+    return bearingdata
 
 
 def main():
-    print("-----Input distance-----------------")
-    distance = input("Input distance from initial point: ")
-    while not number_validation(distance):
-        print("Remenber wcb must a number")
-        distance = input("Input Whole Circle Bearing: ")
 
-    return
+	return
 
 if __name__ == "__main__":
     main()
