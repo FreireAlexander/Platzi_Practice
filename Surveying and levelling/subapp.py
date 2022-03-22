@@ -191,7 +191,83 @@ def simplecalculatewcb():
 
 
 def simplecalculaterb():
-    print("I'm doing nothing yet...")
+    subtitle = "What information do you have?"
+    suboptions = [
+        "1. Reduced Bearing between two coordinates",
+        "2. A Whole Circle Bearing",
+        "3. A Back Whole circle Bearing"
+    ]
+
+    info_choice = menus.list_menu(subtitle, suboptions)
+
+    if info_choice == 0:
+        print("\t Input initial point Coordinates")
+        initialcoordinates = []
+        initialcoordinates = load.Coordinates()
+        menus.clear()
+        print("\t Input final point Coordinates")
+        finalcoordinates = []
+        finalcoordinates = load.Coordinates()
+        wcb = calc.wcbfromcoordinates(initialcoordinates, finalcoordinates)
+        rb = calc.format_wcbtorb(wcb)
+        menus.clear()
+        print("\n\tReduced Bearing from point {} to {} is equals to {}".format(initialcoordinates,finalcoordinates,rb))
+    elif info_choice == 1:
+        subtitle = "How do you prefer to insert angles?"
+        suboptions = [
+            "1. decimal angle ",
+            "2. in DD°MM'SS'' "
+            ]
+        angle_format = menus.list_menu(subtitle, suboptions)
+        if angle_format != 1:
+            print("------Input Whole Circle Bearing------")
+            print("** Angles must be introduces as positive")
+            wcb = load.angle()
+            rb = calc.wcbdecimaltorbdecimal(wcb)
+            wcb = round(wcb,3)
+            print("\tthe Reduced Bearing from WCB of {}° is equal to {}".format(wcb,rb))
+        elif angle_format == 1:
+            print("------Input Wcb------")
+            print("** Angles must be introduces as positive")
+            wcb = load.dms()
+            rb = wcb
+            rb = val.bearingdata(rb)
+            rb = calc.dmstodecimals(rb)
+            rb = calc.format_wcbtorb(rb)
+            print("\tthe Reduced Bearing from wcb of {} is equal to {}".format(wcb,rb))
+    
+    elif info_choice == 2:
+        subtitle = "How do you prefer to insert angles?"
+        suboptions = [
+            "1. decimal angle ",
+            "2. in DD°MM'SS'' "
+            ]
+        angle_format = menus.list_menu(subtitle, suboptions)
+        if angle_format != 1:
+            print("------Input Back Bearing------")
+            print("** Angles must be introduces as positive")
+            wcb = load.angle()
+            backbearing = wcb
+            wcb = calc.backbearing(wcb)
+            rb = calc.wcbdecimaltorbdecimal(wcb)
+            menus.clear()
+            print("\tthe Reduced Bearing from  Back Bearing of {} is equal to {}".format(backbearing,rb))
+        elif angle_format == 1:
+            print("------Input Back Bearing------")
+            print("** Angles must be introduces as positive")
+            wcb = load.dms()
+            backbearing = wcb
+            angle = wcb 
+            angle = val.bearingdata(angle)
+            angle = calc.dmstodecimals(angle)
+            wcb = calc.backbearing(angle)
+            rb = calc.format_wcbtorb(wcb)
+            print("\tthe Reduced Bearing from  Back Bearing of {} is equal to {}".format(backbearing,rb))
+    
+    print("\nPress Enter to continue...")
+    input()
+    menus.clear()
+
     return
 
 def simpleangleconvertion():

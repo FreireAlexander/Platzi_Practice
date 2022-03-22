@@ -29,7 +29,7 @@ def isbearingdecimal(bearing):
     return re.match(bearingformat,bearing)
 
 def isdms(bearing):
-    bearingformat = re.compile(r"^[ ]?([0-9]*)[°']([0-9]|[1-5][0-9])[°'](0|0?\.[1-9]*|[1-9](?:\.[0-9]*)?|[1-5][0-9](?:\.[0-9]*)?)[°']?[°'][ ]?$")
+    bearingformat = re.compile(r"^[ ]?([0-9]*)[°']([0-9]|[1-5][0-9])[°'](0|0?\.[1-9]*|[1-9](?:\.[0-9]*)?|[1-5][0-8](?:\.[0-9]*)?|[5][9])[°']?[°'][ ]?$")
     return re.match(bearingformat,bearing)
 
 
@@ -80,6 +80,10 @@ def main():
     angle = "S33.234'E"
     print(bearingdata_decimal(angle))
     print(calc.rbdecimaltowcb(bearingdata_decimal(angle)))
+    dms = "275'46'58.456'"
+    dms = bearingdata(dms)
+    print(dms)
+    print(calc.dmstodecimals(dms))
     return
 
 if __name__ == "__main__":
