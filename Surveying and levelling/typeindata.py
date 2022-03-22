@@ -1,5 +1,6 @@
 import validation as val
 import calculus as calc
+import menus
 
 def distance():
 
@@ -78,15 +79,21 @@ def reducedbearing():
     flag1 = 0
     if val.isbearing(angle):
         flag1 = 1
-
-    while flag1 == 0:
+    flag2 = 0
+    if val.isbearing2(angle):
+        flag2 = 1
+    while (flag1 + flag2) == 0:
         flag1 = 0
+        flag2 = 0
         print("\tInput angle as N DD°MM'SS'' E")
         print("\tif minutes or seconds are 0's introduce them as well")
         print("\tplease follow the format ")
         angle = input("\tInput angle: ")
         if val.isbearing(angle):
             flag1 = 1
+        
+        if val.isbearing2(angle):
+            flag2 = 1
 
     return angle
 
@@ -126,3 +133,14 @@ def Coordinates():
     coordinates[1] = val.ToNumber(coordinates[1])
     
     return coordinates
+
+def twoCoordinates():
+    print("\t Input initial point Coordinates")
+    initialcoordinates = []
+    initialcoordinates = Coordinates()
+    menus.clear()
+    print("\t Input final point Coordinates")
+    finalcoordinates = []
+    finalcoordinates = Coordinates()
+
+    return initialcoordinates, finalcoordinates

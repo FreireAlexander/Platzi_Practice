@@ -85,7 +85,7 @@ def dmstodecimals(angle):
 	degree = float(angle[0]) + float(angle[1])/60 + float(angle[2])/3600
 	return degree
 
-def format_wcbtorb(wcb):
+def wcbdecimaltorbdms(wcb):
 	wcb = is_wcb_360(wcb)
 	rb = wcb
 	if wcb == 0:
