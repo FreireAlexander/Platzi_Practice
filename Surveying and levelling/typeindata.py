@@ -7,7 +7,7 @@ def distance():
     distance = input("\tInput distance [meters]: ")
     while not val.positive_number_validation(distance):
         print("\tDsitances must be a number")
-        wcb = input("\tInput distance [meters]: ")
+        distance = input("\tInput distance [meters]: ")
         
     distance = val.ToNumber(distance)
 

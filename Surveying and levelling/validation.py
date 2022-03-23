@@ -10,11 +10,8 @@ def ToNumber(number):
 	return number
 
 def positive_number_validation(number):
-	validation = False
-	num_format = re.compile(r'^[^!\v$][^!\D$][0-9]*[.0-9]*$|^[\d][.0-9]*|^[ -][.0-9]*')
-	if re.match(num_format, number) and ToNumber(number) >=0.000001:
-		validation = True
-	return validation
+	num_format = re.compile(r'^([.][0-9]*|0[.0-9]*|[1-9][0-9]*[.0-9]*)$')
+	return re.match(num_format, number)
 
 def number_validation(number):
 	num_format = re.compile(r'^[^!\v$][^!\D$]\-?[0-9]*[.0-9]*$|^[\d][.0-9]*|^[ -][.0-9]*')
