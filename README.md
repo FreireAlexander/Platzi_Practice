@@ -1,12 +1,8 @@
-# CodeRepository
-Repository for practicing coding and programming languages
+# Cursos de Platzi
 
-Directory in this repository
-## Python
-This folder contains exercise and project in Python 
+Este Repositorio contiene algunas prácticas, códigos y similares de los cursos de platzi que estoy siguiendo
 
-## Mastermind
-Well here I include the exercise saw in mastermind course
+## Comprehensions, Funciones y Manejo de Errores
+ 
 
-## Project in skecth 
-Also, you may find directory with project that are just starting
+
